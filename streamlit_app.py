@@ -12,7 +12,7 @@ else:
 
 def train_model(df, target_column):
     st.write("Initializing PyCaret setup...")
-    pyc = setup(df, target=target_column, silent=True, verbose=False)
+    pyc = setup(df, target=target_column, verbose=False)
     info_df = pull()
     st.dataframe(info_df)
     st.write("Setup complete")
