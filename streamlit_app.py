@@ -1,6 +1,11 @@
 import streamlit as st
 import pandas as pd
 
+password = st.text_input("Enter password", type="password")
+if password != "flrssue":
+    st.warning("Incorrect password.")
+    st.stop()
+
 # Allow the user to select either classification or regression
 task_scope = st.selectbox("Select your task type", ["Classification", "Regression"])
 if task_scope == "Classification":
