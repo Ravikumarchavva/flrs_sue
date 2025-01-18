@@ -10,9 +10,9 @@ else:
     from pycaret.regression import *
     sort_by = "R2"
 
-def train_model(target_column):
+def train_model(df, target_column):
     st.write("Initializing PyCaret setup...")
-    pyc = setup(data, target=target_column, silent=True, verbose=False)
+    pyc = setup(df, target=target_column, silent=True, verbose=False)
     info_df = pull()
     st.dataframe(info_df)
     st.write("Setup complete")
@@ -54,7 +54,7 @@ if uploaded_file:
         if columns_to_drop:
             data.drop(columns=columns_to_drop, inplace=True)
         if st.button("Train Model"):
-            train_model(target_column)
+            train_model(data, target_column)
 
 if st.session_state.get('trained'):
     chosen_model = st.selectbox("View metrics for a specific model", options=list(st.session_state['all_model_data'].keys()))
