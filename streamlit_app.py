@@ -16,7 +16,7 @@ def train_model(df, target_column):
     info_df = pull()
     st.dataframe(info_df)
     st.write("Setup complete")
-    models = ["lr", "dt", "rf", "xgboost", "lightgbm"]
+    models = ["lr", "dt", "rf", "lightgbm"]
     all_model_data = {}
     combined_df = pd.DataFrame()
     model_df_placeholder = st.empty()
