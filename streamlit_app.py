@@ -5,33 +5,36 @@ import pandas as pd
 task_scope = st.selectbox("Select your task type", ["Classification", "Regression"])
 if task_scope == "Classification":
     from pycaret.classification import *
+    sort_by = "Accuracy"
 else:
     from pycaret.regression import *
+    sort_by = "R2"
 
 def train_model(target_column):
     st.write("Initializing PyCaret setup...")
-    setup(data, target=target_column, verbose=False)
+    pyc = setup(data, target=target_column, verbose=True)
+    info_df = pull()
+    st.dataframe(info_df)
     st.write("Setup complete")
     models = ["lr", "dt", "rf", "xgboost", "lightgbm"]
     all_model_data = {}
     combined_df = pd.DataFrame()
+    model_df_placeholder = st.empty()
     progress_bar = st.progress(0)
     total = len(models)
     for idx, model_name in enumerate(models, start=1):
-        create_model(model_name)
+        create_model(model_name, cross_validation=False)
         metrics_df = pull().astype(str)
+        metrics_df.index = [model_name]  # Set model name as index
         all_model_data[model_name] = metrics_df
         combined_df = pd.concat([combined_df, metrics_df])
-        st.dataframe(combined_df.astype(str))
+        combined_df = combined_df.sort_values(by=sort_by, ascending=False)  # Sort by Accuracy
+        model_df_placeholder.dataframe(combined_df)
         progress_bar.progress(int((idx / total) * 100))
-    st.write("Comparing all models...")
-    compare_models()
-    final_results = pull().astype(str)
     st.write("Comparison complete:")
-    st.dataframe(final_results)
-    # Allow user to pick and see any single model
-    chosen_model = st.selectbox("View metrics for a specific model", options=models)
-    st.dataframe(all_model_data[chosen_model])
+    st.session_state['all_model_data'] = all_model_data
+    st.session_state['combined_df'] = combined_df
+    st.session_state['trained'] = True
 
 uploaded_file = st.file_uploader("Upload a CSV file")
 
@@ -43,3 +46,7 @@ if uploaded_file:
         data.drop(columns=columns_to_drop, inplace=True)
     if st.button("Train Model"):
         train_model(target_column)
+
+if st.session_state.get('trained'):
+    chosen_model = st.selectbox("View metrics for a specific model", options=list(st.session_state['all_model_data'].keys()))
+    st.dataframe(st.session_state['all_model_data'][chosen_model])
