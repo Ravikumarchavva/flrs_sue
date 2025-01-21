@@ -35,7 +35,8 @@ class Experiment:
             index=False,
             fold_shuffle=True,
             verbose=False,
-            session_id=123
+            session_id=123,
+            fold=5,
         )
         if not self.exp:
             st.error("Experiment setup is incomplete. Please set up the experiment first.")

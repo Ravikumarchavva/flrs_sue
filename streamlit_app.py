@@ -142,7 +142,7 @@ class FlrsSueApp:
                         return
             # Check if experiment is set up before showing models
             if "experiment" in st.session_state:
-                models = ["lr", "dt", "rf", "svm", "nb"]
+                models = ["lr", "dt", "svm", "nb"]
                 if st.button("Train Model", key="train_model_button"):
                     self.trained_models, self.combined_df = self.train_model(models)
                     st.session_state["trained_models"] = self.trained_models
