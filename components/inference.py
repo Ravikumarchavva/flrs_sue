@@ -36,6 +36,6 @@ class Inference:
             st.markdown("<h4>Model Predictions</h4>", unsafe_allow_html=True)
             predictions = self.exp.predict_model(trained_model, data=input_data)
             if len(predictions) == 1:
-                st.markdown(f"<center><h1>{predictions['prediction_score'][0]}</h1></center>", unsafe_allow_html=True)
+                st.markdown(f"<center><h1>{predictions.iloc[:, -1].values[0]}</h1></center>", unsafe_allow_html=True)
             else:
                 st.write(predictions)
