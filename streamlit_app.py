@@ -85,9 +85,9 @@ class FlrsSueApp:
         """
         task_scope = st.selectbox(
             "Select your task type", 
-            [None, "Classification", "Regression"],  # Include None as the first option
-            index=0,  # Make None the default selection
-            format_func=lambda x: "Select Task Type" if x is None else x,  # Display a friendly label for None
+            [None, "Classification", "Regression"],
+            index=0,
+            format_func=lambda x: "Select Task Type" if x is None else x,
             key="task_scope_select",
         )
         if task_scope is None:
