@@ -1,0 +1,69 @@
+@startuml
+title B2B Predictive Analytics Pipeline with AutoML
+
+' Styling
+skinparam ParticipantBackgroundColor White
+skinparam SequenceParticipantBorderColor Black
+skinparam SequenceLifeLineBorderColor Black
+
+' Multiple Clients Representation
+actor "Clients" as Clients #LightBlue
+
+' Left Side - Technical Processes
+participant "Business Understanding &\nData Collection" as BUDC #LightGreen
+participant "Data Preparation &\nFeature Engineering" as DPFE #LightGreen
+participant "AutoML Model Training &\nSelection" as AMTS #LightGreen
+participant "Model Fine-Tuning &\nValidation" as MFTV #LightGreen
+participant "Model Deployment &\nServing" as MDS #LightGreen
+
+' Right Side - Business Processes
+participant "Data Governance &\nCompliance" as DGC #LightSalmon
+participant "Real-Time Inference &\nMonitoring" as RTIM #LightSalmon
+participant "Model Performance &\nFeedback Loop" as MPFL #LightSalmon
+
+== Phase 1: Business Understanding & Data Collection ==
+Clients -> BUDC : Define Business Objectives & Success Metrics
+BUDC -> DGC : Identify Compliance Requirements & Data Privacy Constraints
+BUDC -> BUDC : Collect Raw Data (Batch & Streaming Sources)
+BUDC -> DPFE : Hand Off Data for Preparation
+
+== Phase 2: Data Preparation & Feature Engineering ==
+DPFE -> DPFE : Clean & Transform Data (Handle Missing Values, Outliers)
+DPFE -> DPFE : Engineer Features (Aggregations, Time-Based Features)
+DPFE -> DGC : Validate Data Quality (Schema, Completeness, Anomalies)
+DPFE -> DPFE : Split Data (Train/Validation/Test Sets)
+DPFE -> AMTS : Pass Prepared Data for AutoML
+
+== Phase 3: AutoML Model Training & Selection ==
+AMTS -> AMTS : Train Multiple Models (Using PyCaret/AutoML)
+AMTS -> AMTS : Evaluate Models (Cross-Validation, Metrics)
+AMTS -> AMTS : Select Top Model (Based on Business Metrics)
+AMTS -> MFTV : Pass Selected Model for Fine-Tuning
+
+== Phase 4: Model Fine-Tuning & Validation ==
+MFTV -> MFTV : Hyperparameter Tuning (Bayesian Optimization, Grid Search)
+MFTV -> MFTV : Validate on Holdout Test Set (Final Performance Check)
+MFTV -> DGC : Validate Model Compliance (Fairness, Explainability)
+MFTV -> MDS : Approve Model for Deployment
+
+== Phase 5: Model Deployment & Serving ==
+MDS -> MDS : Containerize Model (Docker)
+MDS -> MDS : Deploy to Serving Infrastructure (Kubernetes, KServe)
+MDS -> RTIM : Enable Real-Time Monitoring (Latency, Throughput, Errors)
+MDS -> Clients : Notify Deployment Completion
+
+== Phase 6: Real-Time Inference & Monitoring ==
+Clients -> RTIM : Submit Prediction Requests
+RTIM -> RTIM : Validate Input Data (Schema, Range Checks)
+RTIM -> RTIM : Retrieve Features (Feature Store Integration)
+RTIM -> RTIM : Generate Predictions (With Confidence Intervals)
+RTIM -> Clients : Return Results + Usage Guidelines
+RTIM -> MPFL : Log Performance Metrics (Accuracy, Drift, Bias)
+
+== Phase 7: Model Performance & Feedback Loop ==
+MPFL -> MPFL : Detect Data/Model Drift (Statistical Tests)
+MPFL -> MPFL : Collect User Feedback (Explicit & Implicit Signals)
+MPFL -> AMTS : Trigger Retraining Pipeline (When Thresholds Breached)
+MPFL -> Clients : Provide Periodic Reports (Business Impact, ROI)
+
+@enduml
